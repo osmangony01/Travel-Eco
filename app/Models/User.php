@@ -3,9 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Post;
+use App\Models\Hotel;
+use App\Models\Place;
+use App\Models\PostComment;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -18,11 +23,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['name','email','password',];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -64,5 +65,25 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function hotel(): HasMany
+    {
+        return $this->hasMany(Hotel::class);
+    }
+
+    public function post(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function postComment(): HasMany
+    {
+        return $this->hasMany(PostComment::class);
+    }
+
+    public function place(): HasMany
+    {
+        return $this->hasMany(Place::class);
     }
 }
