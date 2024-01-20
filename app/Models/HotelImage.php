@@ -11,6 +11,8 @@ class HotelImage extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['hotel_id', 'hotel_image'];
+    
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);
