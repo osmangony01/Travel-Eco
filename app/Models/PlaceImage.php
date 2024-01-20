@@ -11,6 +11,8 @@ class PlaceImage extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['place_id', 'place_image'];
+    
     public function place():BelongsTo
     {
         return $this->belongsTo(Place::class);

@@ -44,7 +44,7 @@ class HotelController extends Controller
         }
 
         $images = $req->file('images');
-        If($images){
+        if($images){
             try{
                 foreach ($images as $key => $image) {
 

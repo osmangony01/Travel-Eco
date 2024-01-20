@@ -13,6 +13,8 @@ class Place extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'place_name', 'place_location', 'place_rating', 'place_description'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

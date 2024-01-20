@@ -11,7 +11,9 @@ class PostImage extends Model
 {
     use HasFactory;
     
-    public function post():BelongsTo
+    protected $fillable = ['place_id', 'place_image'];
+
+    public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
