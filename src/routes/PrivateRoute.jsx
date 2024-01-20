@@ -9,7 +9,7 @@ const PrivateRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
 
     // const tk = localStorage.getItem('access_token');
-
+    console.log(loading)
     if (loading) {
         return <div className='spinner'>
             <ColorRing
@@ -20,16 +20,16 @@ const PrivateRoute = ({ children }) => {
                 wrapperStyle={{}}
                 wrapperClass="blocks-wrapper"
                 colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-            /></div>;
+            />
+        </div>
     }
 
     if (user) {
         return children;
     }
 
-    // useEffect(() => { }, [user, loading]);
     console.log(user)
-    return <Navigate  to={"/"} replace></Navigate>
+    return <Navigate to={"/"} replace></Navigate>
 };
 
 export default PrivateRoute;

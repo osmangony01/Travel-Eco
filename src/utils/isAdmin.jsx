@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Home = () => {
+const useIsAdmin = () => {
     return (
         <div>
-            this is home page
+            
         </div>
     );
 };
 
-export default Home;
+export default useIsAdmin;

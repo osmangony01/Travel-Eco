@@ -3,38 +3,64 @@ import { useContext, useState } from 'react';
 import { FaEye, FaEyeSlash, } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from '../../provider/AuthProvider';
+import { AuthContext } from '../../../provider/AuthProvider';
+import axiosInstance from '../../../routes/axiosInstance';
 
 const SignIn = () => {
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [passShow, setPassShow] = useState(true);
     const [error, setError] = useState("");
-    const { login, user, token } = useContext(AuthContext);
+    const { user, setUser, loading, setLoading, saveToken } = useContext(AuthContext);
     const navigate = useNavigate();
+
+    const login = async (email, password) => {
+        try {
+            const res = await axiosInstance.post('/login', { email, password });
+            console.log(res);
+            console.log(res.status)
+            if (res.data?.user) {
+                setUser(res.data.user);
+                setLoading(false);
+                saveToken(res.data.access_token);
+                const role = res.data.user.role;
+                console.log(role);
+                if (role == 1) {
+                    navigate("/admin", { replace: true });
+                } else {
+                    navigate("/", { replace: true });
+                }
+                // if (role == 0) {
+                //     navigate("/profile", { replace: true });
+                // }
+
+            }
+        } catch (error) {
+            if (error.response)
+                console.log(error.response.data);
+            else
+                console.error('Error with no response from server:', error.message);
+        }
+    }
+
+    const restForm = () => {
+        setEmail('');
+        setPassword('');
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const form = e.target;
-        const email = form.email.value;
-        const password = form.password.value;
 
         setError("")
         if (email === "" || password === "") {
             return;
         }
-        let action = false;
-        action = await login(email, password);
-        if (action) {
-            console.log('success');
-            navigate("/profile", { replace: true });
-        } else {
-            console.log('Something wrong!');
-        }
-            
-        form.reset();
+        console.log(email, password);
+        login(email, password);
+
+        restForm();
     }
-    console.log(user)
-    console.log(token)
 
     return (
         <div className='pt-8 pb-16'>
@@ -45,11 +71,11 @@ const SignIn = () => {
                 <form action="" className='px-4' onSubmit={handleLogin}>
                     <div className='mb-3'>
                         <label htmlFor="" className='block mb-1.5'>Email</label>
-                        <input type="text" name="email" className='input-control hover:border-blue-400 focus:border-blue-400' placeholder='Enter your email' />
+                        <input type="text" onChange={(e) => setEmail(e.target.value)} value={email} name="email" className='input-control hover:border-blue-400 focus:border-blue-400' placeholder='Enter your email' />
                     </div>
                     <div className='mb-3 relative'>
                         <label htmlFor="" className='block  mb-1.5'>Password</label>
-                        <input type={passShow ? "password" : "text"} name="password" className='input-control hover:border-blue-400 focus:border-blue-400' placeholder='Enter your password' />
+                        <input type={passShow ? "password" : "text"} onChange={(e) => setPassword(e.target.value)} value={password} name="password" className='input-control hover:border-blue-400 focus:border-blue-400' placeholder='Enter your password' />
                         <small onClick={() => setPassShow(!passShow)} className='absolute right-6 top-11 text-base text-slate-600' required>
                             {passShow ? <span>{<FaEyeSlash></FaEyeSlash>}</span> : <span>{<FaEye></FaEye>}</span>}
                         </small>

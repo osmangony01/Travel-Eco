@@ -5,7 +5,7 @@ const Profile = () => {
 
     return (
         <div>
-           this is profile page
+           this is user profile page
         </div>
     );
 };

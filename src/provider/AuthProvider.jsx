@@ -1,8 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
 import axiosInstance from "../routes/axiosInstance.js";
-import { useNavigate } from 'react-router-dom';
-import Swal from "sweetalert2";
-
 
 
 export const AuthContext = createContext(null);
@@ -12,59 +9,60 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [token, setToken] = useState(null);
+
     //const navigate = useNavigate();
 
-    const register = async (name, email, password) => {
-        try {
-            const res = await axiosInstance.post('/register', { name, email, password });
-            console.log(res);
-            if (res.data) {
-                //navigate("/", { replace: true });
-                // setUser(res.data.user);
-                // setLoading(true);
-                return true
-            }
-            else {
-                return false;
-            }
-        } catch (error) {
-            // Handle error response
-            if (error.response) {
-                console.log(error.response.data); // Validation errors or other error details
-                const errors = error.response.data.errors;
-                console.log(errors)
-                // You can update the state or display an error message to the user
-                // For example, setPassError(errors.password[0]);
-            } else {
-                console.error('Error with no response from server:', error.message);
-            }
-            return false;
-        }
-    }
+    // const register = async (name, email, password) => {
+    //     try {
+    //         const res = await axiosInstance.post('/register', { name, email, password });
+    //         console.log(res);
+    //         if (res.data) {
+    //             //navigate("/", { replace: true });
+    //             // setUser(res.data.user);
+    //             // setLoading(true);
+    //             return true
+    //         }
+    //         else {
+    //             return false;
+    //         }
+    //     } catch (error) {
+    //         // Handle error response
+    //         if (error.response) {
+    //             console.log(error.response.data); // Validation errors or other error details
+    //             const errors = error.response.data.errors;
+    //             console.log(errors)
+    //             // You can update the state or display an error message to the user
+    //             // For example, setPassError(errors.password[0]);
+    //         } else {
+    //             console.error('Error with no response from server:', error.message);
+    //         }
+    //         return false;
+    //     }
+    // }
 
-    const login = async (email, password) => {
-        try {
-            const res = await axiosInstance.post('/login', { email, password });
-            console.log(res);
-            console.log(res.status)
-            if (res.data?.user) {
-                setUser(res.data.user);
-                setLoading(false);
-                saveToken(res.data.access_token);
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-        catch (error) {
-            if (error.response)
-                console.log(error.response.data);
-            else
-                console.error('Error with no response from server:', error.message);
-            return false;
-        }
-    }
+    // const login = async (email, password) => {
+    //     try {
+    //         const res = await axiosInstance.post('/login', { email, password });
+    //         console.log(res);
+    //         console.log(res.status)
+    //         if (res.data?.user) {
+    //             setUser(res.data.user);
+    //             setLoading(false);
+    //             saveToken(res.data.access_token);
+    //             return true;
+    //         }
+    //         else {
+    //             return false;
+    //         }
+    //     }
+    //     catch (error) {
+    //         if (error.response)
+    //             console.log(error.response.data);
+    //         else
+    //             console.error('Error with no response from server:', error.message);
+    //         return false;
+    //     }
+    // }
 
     const logout = async () => {
         try {
@@ -137,48 +135,40 @@ const AuthProvider = ({ children }) => {
     //     }
     // }
     const authStateChange = async () => {
+        // console.log('auth checking')
         const tk = getToken();
-        if (!user) {
-            if (tk) {
+        if (tk) {
+            if (!user) {
                 try {
-                    const res = await axiosInstance.get(`/profile?token=${tk}`);
+                    const res = await axiosInstance.post(`/me?token=${tk}`);
                     console.log(res);
                     console.log(res.status);
                     if (res?.data) {
                         setUser(res.data);
-                        return res.data; // Resolve the promise with user data
-                    } else {
-                        return null;
+                        setLoading(false);
                     }
                 } catch (error) {
                     console.error('Error with no response from server:', error.message);
-                    return null;
                 }
             }
+        } else {
+            setLoading(false)
         }
-        return null;
     };
 
-
     useEffect(() => {
-        const fetchData = async () => {
-            const userData = await authStateChange();
-            setUser(userData);
-            setLoading(false); // Set loading to false once the authentication state is determined
-        };
-    
-        fetchData();
-    }, [])
+        authStateChange();
+    }, [user, loading])
 
     const authInfo = {
         user,
         loading,
         token,
-        register,
-        login,
         logout,
         setUser,
-        setToken
+        setToken,
+        saveToken,
+        setLoading
     }
 
 
