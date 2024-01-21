@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class PostImage extends Model
 {
     use HasFactory;
-    
-    protected $fillable = ['place_id', 'place_image'];
+
+    protected $fillable = ['post_id', 'post_image'];
 
     public function post(): BelongsTo
     {

@@ -7,6 +7,7 @@ use App\Models\HotelImage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class HotelController extends Controller
 {
@@ -68,4 +69,25 @@ class HotelController extends Controller
         }
         return response()->json(['status' => 201, 'message' => 'Hotel are created successfully'], 201);
     }
+
+    public function fetchHotel()
+    {
+        try {
+            $hotels = Hotel::with('hotelImage')->get();
+    
+            if ($hotels->count() > 0) {
+                return response()->json([
+                    'status' => 200,
+                    'hotels' => $hotels,
+                ], 200);
+            }
+        } catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Records Found!!',
+            ], 404);
+        }
+    }    
+
 }
+

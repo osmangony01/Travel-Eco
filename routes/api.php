@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,8 +35,12 @@ Route::middleware(['api', 'auth:api'])->group(function () {
 
 // creating hotel api
 Route::post('create-hotel', [HotelController::class, 'createHotel']);
+Route::get('hotels', [HotelController::class, 'fetchHotel']);
 
 // creating place api
 Route::post('create-place', [PlaceController::class, 'createPlace']);
+Route::get('places', [PlaceController::class, 'fetchPlace']);
 
-
+//
+Route::post('create-post',[PostController::class, 'createPost']);
+Route::get('allPost', [PostController::class, 'allPost']);

@@ -7,6 +7,7 @@ use App\Models\PlaceImage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PlaceController extends Controller
 {
@@ -68,4 +69,23 @@ class PlaceController extends Controller
             return response()->json(['status' => 201, 'message' => 'place are created successfully'], 201);
         } 
     }
+
+    public function fetchPlace()
+    {
+        try {
+            $places = Place::with('placeImage')->get();
+    
+            if ($places->count() > 0) {
+                return response()->json([
+                    'status' => 200,
+                    'places' => $places,
+                ], 200);
+            }
+        } catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Records Found!!',
+            ], 404);
+        }
+    }    
 }
