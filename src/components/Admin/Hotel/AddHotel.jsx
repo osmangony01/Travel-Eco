@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import axiosInstance from '../../../routes/axiosInstance';
 import { AuthContext } from '../../../provider/AuthProvider';
 
-const Hotel = () => {
+const AddHotel = () => {
 
     const { user } = useContext(AuthContext)
     const [hotelName, setHotelName] = useState("");
@@ -140,6 +140,6 @@ const Hotel = () => {
     );
 };
 
-export default Hotel;
+export default AddHotel;
 
 

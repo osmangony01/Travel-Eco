@@ -31,15 +31,15 @@ const Sidebar = () => {
     }
     return (
         <div className="w-full text-white flex py-5 px-4 flex-col">
-            <h1>Admin Panel</h1>
+            {/* <h1>Admin Panel</h1> */}
             <div className='my-2'>
                 <Link to={''}>Dashboard</Link>
             </div>
             <div className='my-2'>
-                <Link to={'hotel'}>Hotels</Link>
+                <Link to={'hotel-list'}>Hotels</Link>
             </div>
             <div className='my-2'>
-                <Link to={'place'}>Places</Link>
+                <Link to={'place-list'}>Places</Link>
             </div>
             <hr></hr>
             <div className='my-2'>

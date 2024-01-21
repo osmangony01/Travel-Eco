@@ -8,9 +8,15 @@ import PrivateRoute from "./PrivateRoute";
 
 import Dashboard from "../components/Admin/Dashboard";
 import AdminSidebar from "../components/Admin/AdminLayout";
-import Hotel from "../components/Admin/Hotel/Hotel";
-import Place from "../components/Admin/Place/Place";
+
 import About from "../components/About/About";
+import AddHotel from "../components/Admin/Hotel/AddHotel";
+import AddPlace from "../components/Admin/Place/AddPlace";
+import PlaceList from "../components/Admin/Place/PlaceList";
+import HotelList from "../components/Admin/Hotel/HotelList";
+import Hotel from "../components/Hotel/Hotel";
+import Place from "../components/Place/Place";
+import AllPost from "../components/User/Post/AllPost";
 
 
 const router = createBrowserRouter([
@@ -33,6 +39,10 @@ const router = createBrowserRouter([
             {
                 path: "/about-us",
                 element:<About></About>
+            },
+            {
+                path: "/blog-post",
+                element:<AllPost></AllPost>
             },
 
         ]
@@ -59,12 +69,20 @@ const router = createBrowserRouter([
                 element: <Dashboard></Dashboard>
             },
             {
-                path: "hotel",
-                element: <Hotel></Hotel>
+                path: "hotel-list",
+                element: <HotelList></HotelList>
             },
             {
-                path: "place",
-                element: <Place></Place>
+                path: "add-hotel",
+                element: <AddHotel></AddHotel>
+            },
+            {
+                path: "place-list",
+                element: <PlaceList></PlaceList>
+            },
+            {
+                path: "add-place",
+                element: <AddPlace></AddPlace>
             }
         ]
     }

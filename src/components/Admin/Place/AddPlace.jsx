@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import axiosInstance from '../../../routes/axiosInstance';
 import { AuthContext } from '../../../provider/AuthProvider';
 
-const Place = () => {
+const AddPlace = () => {
 
     const { user } = useContext(AuthContext)
     const [placeName, setPlaceName] = useState("");
@@ -10,14 +10,11 @@ const Place = () => {
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
     const [images, setImages] = useState([]);
-    
-
 
     const createPlace = async (formData) => {
         const config = {
             headers: {'Content-Type': 'multipart/form-data',}
         };
-
         try {
             const res = await axiosInstance.post('/create-place', formData, config);
             console.log(res);
@@ -113,6 +110,6 @@ const Place = () => {
     );
 };
 
-export default Place;
+export default AddPlace;
 
 
