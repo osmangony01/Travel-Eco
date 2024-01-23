@@ -8,7 +8,7 @@ const HotelList = () => {
 
     const [hotel, setHotel] = useState([]);
 
-    const fetchFilterData = async () => {
+    const fetchHotelData = async () => {
         try {
             // Fetch tasks based on the search term
             const response = await axiosInstance.get("/hotels")
@@ -18,6 +18,7 @@ const HotelList = () => {
                 setHotel(response.data.hotels);
             }
         } catch (error) {
+            
             if (error.response) {
                 const errors = error.response.data
                 console.log(errors);
@@ -28,7 +29,7 @@ const HotelList = () => {
     }
 
     useEffect(() => {
-        fetchFilterData();
+        fetchHotelData();
     }, [])
 
     useEffect(() => {

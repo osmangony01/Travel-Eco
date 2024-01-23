@@ -28,6 +28,7 @@ const CreatePost = ({ status, handleAddModal }) => {
             }
         } catch (error) {
             // Handle error response
+            console.log(error)
             if (error.response) {
                 console.log(error.response.data); // Validation errors or other error details
                 const errors = error.response.data.errors;
@@ -57,6 +58,11 @@ const CreatePost = ({ status, handleAddModal }) => {
         //     console.log(pair[0], pair[1]);
         // }
         createPost(formData);
+        handleAddModal(false);
+
+        setImages([]);
+        setTitle('');
+        setContent('');
     }
 
     return (

@@ -32,17 +32,17 @@ const Sidebar = () => {
     return (
         <div className="w-full text-white flex py-5 px-4 flex-col">
             {/* <h1>Admin Panel</h1> */}
-            <div className='my-2'>
+            <div className='my-2 hover:text-orange-500 font-semibold'>
                 <Link to={''}>Dashboard</Link>
             </div>
-            <div className='my-2'>
+            <div className='my-2 hover:text-orange-500 font-semibold'>
                 <Link to={'hotel-list'}>Hotels</Link>
             </div>
-            <div className='my-2'>
+            <div className='my-2 hover:text-orange-500 font-semibold'>
                 <Link to={'place-list'}>Places</Link>
             </div>
             <hr></hr>
-            <div className='my-2'>
+            <div className='my-2 hover:text-violet-500 font-semibold'>
                 <button onClick={handleLogOut}>Sign Out</button>
             </div>
         </div>

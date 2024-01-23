@@ -8,13 +8,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-
 import B1Img from '../../../public/home/1.jpg';
 import B2Img from '../../../public/home/2.jpg';
 import B3Img from '../../../public/home/3.jpg';
-
-
-
 
 const Banner = () => {
     return (

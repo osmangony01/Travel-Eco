@@ -8,10 +8,12 @@ const Hotel = () => {
 
     useEffect(() => { }, [hotels])
 
+    const limitedHotels = hotels.slice(0, 4);
+
     return (
-        <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 gap-y-8  px-10 py-6'>
+        <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 gap-y-8  '>
             {
-                hotels?.map((item, index) => {
+                limitedHotels?.map((item, index) => {
                     return <div key={index} className='bg-white rounded'>
                        
                         <div  >
