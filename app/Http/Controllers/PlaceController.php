@@ -20,7 +20,7 @@ class PlaceController extends Controller
                 'place_description' => 'required|string',
                 'place_location' => 'required|string',
                 'place_rating' => 'required', 
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg, webp',
             ]);
     
             if ($validator->fails()) {
@@ -87,5 +87,17 @@ class PlaceController extends Controller
                 'message' => 'No Records Found!!',
             ], 404);
         }
-    }    
+    } 
+
+    public function updatePlace(Request $req)
+    {
+
+    }
+
+    public function deletePlace($id)
+    {
+        
+    }  
+    
+    
 }

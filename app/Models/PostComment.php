@@ -12,6 +12,8 @@ class PostComment extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id','post_id','post_comment_content'];
+    
     public function post():BelongsTo
     {
         return $this->belongsTo(Post::class);

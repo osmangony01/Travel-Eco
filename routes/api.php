@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\PostController;
+use App\Models\PostComment;
+use PHPUnit\Framework\Attributes\PostCondition;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +35,24 @@ Route::middleware(['api', 'auth:api'])->group(function () {
     Route::post('me', [AuthController::class, 'me']);
 });
 
-// creating hotel api
+// all hotel related api
 Route::post('create-hotel', [HotelController::class, 'createHotel']);
 Route::get('hotels', [HotelController::class, 'fetchHotel']);
+Route::post('update-hotels', [HotelController::class, 'updateHotel']);
+Route::get('delete-hotels', [HotelController::class, 'deleteHotel']);
 
-// creating place api
+// all place related api
 Route::post('create-place', [PlaceController::class, 'createPlace']);
 Route::get('places', [PlaceController::class, 'fetchPlace']);
+Route::get('update-places', [PlaceController::class, 'updatePlace']);
+Route::get('delete-places', [PlaceController::class, 'deletePlace']);
 
-//
+// all post related api
 Route::post('create-post',[PostController::class, 'createPost']);
 Route::get('allPost', [PostController::class, 'allPost']);
+Route::get('update-Post', [PostController::class, 'updatePost']);
+Route::get('delete-Post', [PostController::class, 'deletePost']);
+
+// all comment related api
+Route::post('create-comment', [PostController::class, 'createComment']);
+Route::get('comments', [PostController::class, 'allComments']);
