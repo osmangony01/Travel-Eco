@@ -57,13 +57,15 @@ Route::post('create-post',[PostController::class, 'createPost']);
 Route::get('allPost', [PostController::class, 'allPost']);
 
 // update post api
-Route::put('update-Post', [PostController::class, 'updatePost']);
+Route::put('update-post/{id}', [PostController::class, 'updatePost']);
 
 // delete post api
 Route::delete('delete-post/{id}', [PostController::class, 'deletePost']);
 
 // get specific user post api
 Route::get("user-post/{id}", [PostController::class, 'userPost']);
+
+// 
 
 //------------------------------ End post api -----------------------------------------------
 

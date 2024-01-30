@@ -18,56 +18,55 @@ use OpenTelemetry\SDK\Trace\TracerProvider;
 class PostController extends Controller
 {
     public function createPost(Request $req)
-    { {
-            $validator = Validator::make($req->all(), [
-                'user_id' => 'required',
-                'post_title' => 'required|string',
-                'post_content' => 'required|string',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
-            ]);
+    {
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+            'post_title' => 'required|string',
+            'post_content' => 'required|string',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+        ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 422,
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            try {
-                $post = Post::create([
-                    'user_id' => $req->user_id,
-                    'post_title' => $req->post_title,
-                    'post_content' => $req->post_content,
-                ]);
-            } catch (\Exception $e) {
-                return response()->json(['status' => 500, 'error' => 'Failed to insert data.'], 500);
-            }
-
-            $images = $req->file('images');
-            if ($images) {
-                try {
-                    foreach ($images as $key => $image) {
-
-                        // Sanitize the original filename directly using Str::slug()
-                        $sanitizedOriginalName = Str::slug($image->getClientOriginalName());
-
-                        // Generate a unique filename
-                        $imageName = $sanitizedOriginalName . '_' . time() . '_' . $key . '.' . $image->getClientOriginalExtension();
-
-                        // Move the file to the desired location
-                        $image->move('uploads/', $imageName);
-
-                        PostImage::create([
-                            "post_id" => $post->id,
-                            "post_image" => $imageName
-                        ]);
-                    }
-                } catch (\Exception $e) {
-                    return response()->json(['status' => 500, 'error' => 'Failed to insert image data.', "error-type" => $e], 500);
-                }
-            }
-            return response()->json(['status' => 201, 'message' => 'place are created successfully'], 201);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors()
+            ], 422);
         }
+
+        try {
+            $post = Post::create([
+                'user_id' => $req->user_id,
+                'post_title' => $req->post_title,
+                'post_content' => $req->post_content,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'error' => 'Failed to insert data.'], 500);
+        }
+
+        $images = $req->file('images');
+        if ($images) {
+            try {
+                foreach ($images as $key => $image) {
+
+                    // Sanitize the original filename directly using Str::slug()
+                    $sanitizedOriginalName = Str::slug($image->getClientOriginalName());
+
+                    // Generate a unique filename
+                    $imageName = $sanitizedOriginalName . '_' . time() . '_' . $key . '.' . $image->getClientOriginalExtension();
+
+                    // Move the file to the desired location
+                    $image->move('uploads/', $imageName);
+
+                    PostImage::create([
+                        "post_id" => $post->id,
+                        "post_image" => $imageName
+                    ]);
+                }
+            } catch (\Exception $e) {
+                return response()->json(['status' => 500, 'error' => 'Failed to insert image data.', "error-type" => $e], 500);
+            }
+        }
+        return response()->json(['status' => 201, 'message' => 'place are created successfully'], 201);
     }
 
     public function allPost()
@@ -160,8 +159,66 @@ class PostController extends Controller
         }
     }
 
-    public function updatePost(Request $req)
+    public function updatePost(Request $req, $id)
     {
+        $validator = Validator::make($req->all(), [
+            'post_title' => 'required|string',
+            'post_content' => 'required|string',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+                $post = Post::findOrFail($id);
+                $post->post_title = $req->post_title;
+                $post->post_content =  $req->post_content;
+
+                if ($post->save()) {
+                    return response()->json([
+                        'status' => 202,
+                        'message' => 'Post updated successfully'
+                    ], 202);
+                } 
+                else {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Something went wrong!'
+                    ], 500);
+                }
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'error' => 'Failed to insert data.'], 500);
+        }
+
+        $images = $req->file('images');
+        if ($images) {
+            try {
+                foreach ($images as $key => $image) {
+
+                    // Sanitize the original filename directly using Str::slug()
+                    $sanitizedOriginalName = Str::slug($image->getClientOriginalName());
+
+                    // Generate a unique filename
+                    $imageName = $sanitizedOriginalName . '_' . time() . '_' . $key . '.' . $image->getClientOriginalExtension();
+
+                    // Move the file to the desired location
+                    $image->move('uploads/', $imageName);
+
+                    PostImage::create([
+                        "post_id" => $post->id,
+                        "post_image" => $imageName
+                    ]);
+                }
+            } catch (\Exception $e) {
+                return response()->json(['status' => 500, 'error' => 'Failed to insert image data.', "error-type" => $e], 500);
+            }
+        }
+        return response()->json(['status' => 201, 'message' => 'post are created successfully'], 201);
     }
 
     public function deletePost($id)
@@ -173,8 +230,7 @@ class PostController extends Controller
                 'status' => 200,
                 'message' => 'Post deleted successful',
             ], 200);
-        } 
-        catch (ModelNotFoundException $exception) {
+        } catch (ModelNotFoundException $exception) {
             return response()->json([
                 'status' => 404,
                 'message' => 'post not found!',
@@ -198,7 +254,6 @@ class PostController extends Controller
                 'status' => 404,
                 'message' => 'user post not found!',
             ], 404);
-            
         } catch (ModelNotFoundException $exception) {
             return response()->json([
                 'status' => 500,
