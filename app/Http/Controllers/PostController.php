@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use OpenTelemetry\API\Trace\Span;
+use OpenTelemetry\API\Trace\StatusCode;
+use OpenTelemetry\SDK\Trace\TracerProvider;
+
 class PostController extends Controller
 {
     public function createPost(Request $req)
@@ -72,6 +76,31 @@ class PostController extends Controller
             $posts = Post::with('postImage', 'user', 'postComment')->get();
 
             if ($posts->count() > 0) {
+
+
+                $tracerProvider = new TracerProvider();
+                $tracer = $tracerProvider->getTracer('my-ins');
+
+                if ($tracer) {
+
+                    $span = Span::getCurrent();
+
+                    $span->setAttribute('foo', 'bar');
+                    $span->setAttribute('Application', 'Laravel');
+                    $span->setAttribute('foo', 'bar1');
+                    $span->updateName('post api');
+
+                    $childSpan = $tracer->spanBuilder('Child span')->startSpan();
+                    $childScope = $childSpan->activate();
+                    try {
+                        throw new \Exception('Exception Example');
+                    } catch (\Exception $exception) {
+                        $childSpan->recordException($exception);
+                    }
+                    $childSpan->end();
+                    $childScope->detach();
+                }
+
                 return response()->json([
                     'status' => 200,
                     'posts' => $posts,
@@ -107,7 +136,6 @@ class PostController extends Controller
                 'post_comment_content' => $req->post_comment_content
             ]);
             return response()->json(['status' => 201, 'message' => 'place are created successfully'], 201);
-
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'error' => 'Failed to insert comment.'], 500);
         }
@@ -134,11 +162,48 @@ class PostController extends Controller
 
     public function updatePost(Request $req)
     {
-
     }
 
     public function deletePost($id)
     {
-        
+        try {
+            $post = Post::findOrFail($id);
+            $post->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Post deleted successful',
+            ], 200);
+        } 
+        catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'post not found!',
+            ], 404);
+        }
+    }
+
+    public function userPost($id)
+    {
+        try {
+            $user_post = Post::where('user_id', $id)->with('postImage', 'postComment', 'user')->get();
+
+            if ($user_post->count() > 0) {
+                return response()->json([
+                    'status' => 200,
+                    'posts' => $user_post,
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 404,
+                'message' => 'user post not found!',
+            ], 404);
+            
+        } catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something Wrong!',
+            ], 500);
+        }
     }
 }

@@ -38,20 +38,36 @@ Route::middleware(['api', 'auth:api'])->group(function () {
 // all hotel related api
 Route::post('create-hotel', [HotelController::class, 'createHotel']);
 Route::get('hotels', [HotelController::class, 'fetchHotel']);
-Route::post('update-hotels', [HotelController::class, 'updateHotel']);
-Route::get('delete-hotels', [HotelController::class, 'deleteHotel']);
+Route::put('update-hotels', [HotelController::class, 'updateHotel']);
+Route::delete('delete-hotels', [HotelController::class, 'deleteHotel']);
 
 // all place related api
 Route::post('create-place', [PlaceController::class, 'createPlace']);
 Route::get('places', [PlaceController::class, 'fetchPlace']);
-Route::get('update-places', [PlaceController::class, 'updatePlace']);
-Route::get('delete-places', [PlaceController::class, 'deletePlace']);
+Route::put('update-places', [PlaceController::class, 'updatePlace']);
+Route::delete('delete-places', [PlaceController::class, 'deletePlace']);
 
-// all post related api
+
+// ---------------------------- blog post related api --------------------------------------
+
+// post creation api
 Route::post('create-post',[PostController::class, 'createPost']);
+
+// all post api
 Route::get('allPost', [PostController::class, 'allPost']);
-Route::get('update-Post', [PostController::class, 'updatePost']);
-Route::get('delete-Post', [PostController::class, 'deletePost']);
+
+// update post api
+Route::put('update-Post', [PostController::class, 'updatePost']);
+
+// delete post api
+Route::delete('delete-post/{id}', [PostController::class, 'deletePost']);
+
+// get specific user post api
+Route::get("user-post/{id}", [PostController::class, 'userPost']);
+
+//------------------------------ End post api -----------------------------------------------
+
+
 
 // all comment related api
 Route::post('create-comment', [PostController::class, 'createComment']);

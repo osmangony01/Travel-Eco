@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use PhpParser\Node\Expr\FuncCall;
 
 class HotelController extends Controller
 {
@@ -88,6 +89,16 @@ class HotelController extends Controller
             ], 404);
         }
     }    
+
+    public function updateHotel(Request $req)
+    {
+
+    }
+
+    public function deleteHotel($id)
+    {
+        
+    }
 
 }
 

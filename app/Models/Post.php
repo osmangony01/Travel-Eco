@@ -30,4 +30,16 @@ class Post extends Model
     {
         return $this->hasMany(PostImage::class);
     }
+
+    // Define cascading deletes
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Deleting post will also delete associated images and comments
+        static::deleting(function ($post) {
+            $post->postImage()->delete();
+            $post->postComment()->delete();
+        });
+    }
 }
