@@ -12,14 +12,14 @@ const Hotel = () => {
         <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 gap-y-8  px-10 py-6'>
             {
                 hotels?.map((item, index) => {
-                    return <div key={index} className='bg-white rounded'>
+                    return <div key={index} className='bg-white rounded cd'>
                        
                         <div  >
                             {item.hotel_image?.length > 0 && (
                                 <img
                                     src={`${import.meta.env.VITE_FILE_PATH}${item.hotel_image[0].hotel_image}`}
                                     alt="image"
-                                    className='rounded h-[250px] w-full'
+                                    className='rounded-t h-[250px] w-full'
                                 />
                             )}
                         </div>

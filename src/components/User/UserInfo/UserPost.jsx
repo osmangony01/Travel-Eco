@@ -1,22 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaUserCircle } from 'react-icons/fa';
-import axiosInstance from '../../../routes/axiosInstance';
 import { AuthContext } from '../../../provider/AuthProvider';
-import CreateComment from './CreateComment';
-import { TbMessage } from "react-icons/tb";
+import useSpecificUserPost from '../../hooks/useSpecificUserPost';
 import useAllComment from '../../hooks/useComment';
-import ShowComment from './ShowComment';
-import PostLoading from "../../../utils/PostLoading";
+import PostLoading from '../../../utils/PostLoading';
+import { FaUserCircle } from 'react-icons/fa';
+import CreateComment from '../Post/CreateComment';
+import ShowComment from '../Post/ShowComment';
+import { TbMessage } from 'react-icons/tb';
+import { BsThreeDots } from "react-icons/bs";
+import { Link } from 'react-router-dom';
 
-const AllPost = () => {
-
+const UserPost = () => {
     const { user } = useContext(AuthContext);
-    const [post, setPost] = useState([]);
     const [addModel, setAddModal] = useState(false);
-    //const [showCommentModal, setShowCommentModal] = useState(false);
     const [commentModals, setCommentModals] = useState({});
 
-    const { comments, loading, error } = useAllComment();
+    const [postControl, setPostControl] = useState(false);
+    const { userPosts, loading, error } = useSpecificUserPost();
+    //const [showCommentModal, setShowCommentModal] = useState(false);
+
+    const { comments, } = useAllComment();
 
 
     const handleAddModal = (status) => {
@@ -31,55 +34,48 @@ const AllPost = () => {
         setCommentModals((prev) => ({ ...prev, [postId]: status }));
     }
 
-    const fetchAllPost = async () => {
-        try {
-            // Fetch tasks based on the search term
-            const response = await axiosInstance.get("/allPost")
-            //setTasks(response.data);
-            console.log(response)
-            if (response.data?.posts) {
-                setPost(response.data.posts);
-            }
-        } catch (error) {
-            if (error.response) {
-                const errors = error.response.data
-                console.log(errors);
-            } else {
-                console.error('Error with no response from server:', error.message);
-            }
-        }
-    }
-
-
-    useEffect(() => {
-        fetchAllPost()
-    }, [])
-
-    useEffect(() => { }, [post, comments])
+    useEffect(() => { }, [userPosts, comments])
     // useEffect(() => { }, [places])
 
-
-
-
-    console.log(post)
-    console.log(comments)
+    console.log(userPosts)
+    //console.log(comments)
 
     return (
         <div className='w-full md:w-[650px] mx-auto rounded p-1 text-sm '>
             {
-                !post && <PostLoading></PostLoading>
+                !userPosts && <PostLoading></PostLoading>
             }
             {
-                post?.map((item, index) => {
-                    return <div className=' border rounded-lg  bg-white my-3 hover:border-violet-300' key={index}>
+                userPosts?.map((item, index) => {
+                    return <div className=' border rounded-lg  bg-white my-3 cd' key={index}>
                         <div className='p-4'>
-                            <div className='flex gap-2 items-center'>
-                                <label className="btn btn-ghost btn-circle avatar m-0">
-                                    <div className="w-10 rounded-full">
-                                        <FaUserCircle size={40}></FaUserCircle>
-                                    </div>
-                                </label>
-                                <span>{item.user?.name}</span>
+                            <div className='flex gap-2 items-center justify-between'>
+                                <div>
+                                    <label className="btn btn-ghost btn-circle avatar m-0">
+                                        <div className="w-10 rounded-full">
+                                            <FaUserCircle size={40}></FaUserCircle>
+                                        </div>
+                                    </label>
+                                    <span>{item.user?.name}</span>
+                                </div>
+                                <div className="relative" onClick={() => setPostControl(!postControl)}>
+                                    <label className="btn btn-ghost btn-circle avatar m-0">
+                                        <div className=" rounded-full flex items-center">
+                                            <BsThreeDots size={25} />
+                                        </div>
+                                    </label>
+                                    {
+                                        postControl && <div className="absolute border rounded-lg right-0 top-12 z-10 text-black bg-white border-gray-300">
+                                            <ul className="menu menu-compact mt-1 p-1 shadow bg-base-100 rounded-md w-52">
+                                                <li className="my-1 hover:text-violet-600 hover:font-semibold"><Link>Edit Post</Link></li>
+                                                <li className="my-1 hover:text-violet-600 hover:font-semibold" ><Link>Delete Post</Link></li>
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                                {/* <div>
+                                    <BsThreeDots size={30} />
+                                </div> */}
                             </div>
                             <div className='font-semibold text-lg'>{item.post_title}</div>
                             <div className=''>{item.post_content}</div>
@@ -107,7 +103,6 @@ const AllPost = () => {
                                     <div onClick={() => handleAddModal(true)} className='hover:text-blue-500 cursor-pointer hover:underline flex items-center'><TbMessage /> <span className='pl-1'>Comment</span></div>
                                 </div>
                             </div>
-
                         }
 
                         {<CreateComment postID={item.id} userID={user?.id} status={addModel} handleAddModal={handleAddModal}></CreateComment>}
@@ -121,6 +116,4 @@ const AllPost = () => {
     );
 };
 
-export default AllPost;
-
-
+export default UserPost;

@@ -28,7 +28,7 @@ const Place = () => {
             <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 gap-y-8  '>
                 {
                     limitedPlaces?.map((item, index) => {
-                        return <div key={index} className='bg-white  rounded '>
+                        return <div key={index} className='bg-white  rounded border border-gray-200 cd'>
                             <div>
                                 {/* {item.place_image?.length > 0 && (
                                     <img

@@ -45,7 +45,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="flex justify-between items-center py-5 px-10 mx-auto bg-white">
+        <nav className="flex justify-between items-center py-5 px-10 mx-auto bg-white border-b border-gray-200">
             <h1 className="text-2xl font-semibold"><Link to="/">TravelEco</Link></h1>
             <ul className="flex items-center justify-center">
                 <li className="mx-3 font-semibold"><ActiveLink to="/hotel">Hotel</ActiveLink></li>
@@ -69,8 +69,8 @@ const Navbar = () => {
                                         <hr></hr>
                                         <li className="my-2 hover:text-blue-600"><Link to={'/profile'}>Profile</Link></li>
                                         <li className="my-2 hover:text-blue-600" onClick={() => handleAddModal(true)}><Link>Create post</Link></li>
-                                        <hr></hr>
-                                        <li className="my-2 hover:text-blue-600" onClick={handleLogOut}><Link>Sign Out</Link></li>
+                                        {/* <hr></hr>
+                                        <li className="my-2 hover:text-blue-600" onClick={handleLogOut}><Link>Sign Out</Link></li> */}
                                     </ul>
                                 </div>
                             }

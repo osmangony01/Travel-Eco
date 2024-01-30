@@ -1,9 +1,13 @@
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body{
+html, body{
   background: rgb(236, 236, 250);
+  position: relative;
+  height: none;
 }
 
 .input-control {
@@ -16,4 +20,9 @@ body{
 
 .task-input{
   @apply w-full  box-border py-1.5 px-3 rounded  border border-slate-300 outline-none
+}
+
+.cd:hover {
+  border: 1px solid rgb(192, 224, 250);
+  box-shadow: 1px 1px 5px 2px rgb(219, 220, 221);
 }

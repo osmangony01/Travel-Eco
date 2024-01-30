@@ -1,11 +1,14 @@
 
 import React from 'react';
+import UserNav from './UserNav/UserNav';
+import UserInfo from './UserInfo/UserInfo';
 
 const Profile = () => {
 
     return (
         <div>
-           this is user profile page
+            <UserNav></UserNav>
+            <UserInfo></UserInfo>
         </div>
     );
 };

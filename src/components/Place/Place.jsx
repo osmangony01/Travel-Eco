@@ -29,16 +29,16 @@ const Place = () => {
                 })
             } */}
 
-            <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 gap-y-8  px-10 py-6'>
+            <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-x-6 gap-y-8  px-10 py-6 bg-white'>
             {
                 places?.map((item, index) => {
-                    return <div key={index} className='bg-white rounded'>
+                    return <div key={index} className='bg-white rounded cd border'>
                         <div  >
                         {item.place_image?.length > 0 && (
                                 <img
                                     src={`${import.meta.env.VITE_FILE_PATH}${item.place_image[0].place_image}`}
                                     alt="image"
-                                    className='rounded-lg h-[250px] w-full'
+                                    className='h-[250px] w-full rounded-t'
                                 />
                             )}
                         </div>
