@@ -162,6 +162,7 @@ class PostController extends Controller
     public function updatePost(Request $req, $id)
     {
         $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
             'post_title' => 'required|string',
             'post_content' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
@@ -175,22 +176,21 @@ class PostController extends Controller
         }
 
         try {
-                $post = Post::findOrFail($id);
-                $post->post_title = $req->post_title;
-                $post->post_content =  $req->post_content;
+            $post = Post::findOrFail($id);
+            $post->post_title = $req->post_title;
+            $post->post_content =  $req->post_content;
 
-                if ($post->save()) {
-                    return response()->json([
-                        'status' => 202,
-                        'message' => 'Post updated successfully'
-                    ], 202);
-                } 
-                else {
-                    return response()->json([
-                        'status' => 500,
-                        'message' => 'Something went wrong!'
-                    ], 500);
-                }
+            if ($post->save()) {
+                return response()->json([
+                    'status' => 202,
+                    'message' => 'Post updated successfully'
+                ], 202);
+            } else {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Something went wrong!'
+                ], 500);
+            }
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'error' => 'Failed to insert data.'], 500);
         }
@@ -253,6 +253,30 @@ class PostController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'user post not found!',
+            ], 404);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something Wrong!',
+            ], 500);
+        }
+    }
+
+    public function fetchPost($id)
+    {
+        try {
+            $post = Post::findOrFail($id);
+
+            if ($post->count() > 0) {
+                return response()->json([
+                    'status' => 200,
+                    'posts' => $post,
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 404,
+                'message' => 'post not found!',
             ], 404);
         } catch (ModelNotFoundException $exception) {
             return response()->json([

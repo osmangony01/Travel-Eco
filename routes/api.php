@@ -65,8 +65,8 @@ Route::delete('delete-post/{id}', [PostController::class, 'deletePost']);
 // get specific user post api
 Route::get("user-post/{id}", [PostController::class, 'userPost']);
 
-// 
-
+// get a post api
+Route::get("fetch-post/{id}", [PostController::class, 'fetchPost']);
 //------------------------------ End post api -----------------------------------------------
 
 

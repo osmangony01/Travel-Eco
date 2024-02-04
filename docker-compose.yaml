@@ -1,14 +1,111 @@
-version: '3.7'
-services:
-    zipkin:
-        image: openzipkin/zipkin-slim
-        ports:
-            - "9411:9411"
-    jaeger:
-        image: jaegertracing/all-in-one
-        environment:
-            COLLECTOR_ZIPKIN_HOST_PORT: 9412
+version: "3.8"
 
-        ports:
-            - "9412:9412"
-            - "16686:16686"
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: travel-eco-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html:cached
+      - ./docker/nginx:/etc/nginx/conf.d
+    # depends_on:
+    #   - php
+    networks:
+      - travel-eco-networks
+
+  php:
+    build: 
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: travel-eco-php
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html:cached
+      - ./docker/php/php-fpm.ini:/usr/local/etc/php/conf.d/custom.ini
+    depends_on:
+      - mysql
+    networks:
+      - travel-eco-networks
+
+  mysql:
+    image: mysql:latest
+    container_name: travel-eco-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: travel_finder
+      MYSQL_USER: travel
+      MYSQL_PASSWORD: travel
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - travel-eco-networks
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: travel-eco-phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=travel
+      - PMA_PASSWORD=travel
+    ports:
+      - "8080:80"
+    volumes:
+      - ./phpmyadmin/config:/etc/phpmyadmin
+    depends_on:
+      - mysql
+    networks:
+      - travel-eco-networks
+
+volumes:
+  travel-eco-volumes:
+    driver: local
+
+
+networks:
+  travel-eco-networks:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3.7'
+# services:
+#     zipkin:
+#         image: openzipkin/zipkin-slim
+#         ports:
+#             - "9411:9411"
+#     jaeger:
+#         image: jaegertracing/all-in-one
+#         environment:
+#             COLLECTOR_ZIPKIN_HOST_PORT: 9412
+
+#         ports:
+#             - "9412:9412"
+#             - "16686:16686"
